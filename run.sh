@@ -18,7 +18,7 @@ print_message() {
 
 # Make directories that are excluded from GIT
 create_directories() {
-    print_message "      Creating Directories"
+    print_message "     Creating Directories"
     mkdir -p build/windows
     mkdir -p release/windows/include/cipster/cip
     mkdir -p release/windows/include/cipster/enet_encap
@@ -36,14 +36,14 @@ create_directories() {
 
 # Function to update CIPster submodule
 update_submodule() {
-    print_message "      Updating CIPster submodule"
+    print_message "     Updating CIPster submodule"
     git submodule update --init --recursive --remote
     echo -e "${PRIMARY_COLOR}Done."
 }
 
 # Function to build the Windows version
 build_windows() {
-    print_message "        Building Windows version"
+    print_message "     Building Windows version"
     cd build/windows
     cmake -DCMAKE_TOOLCHAIN_FILE=../../CIPster/source/buildsupport/Toolchain/toolchain-mingw64.cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/windows ../../CIPster/source/
     make
@@ -53,14 +53,14 @@ build_windows() {
 
 # Function to copy built library file to release directory for Windows
 copy_windows_lib() {
-    print_message "  Copying built library file for Windows"
+    print_message "     Copying built library file for Windows"
     cp build/windows/src/libeip.a release/windows/lib/cipster
     echo -e "${PRIMARY_COLOR}Done."
 }
 
 # Function to modify header files for Linux compatibility
 modify_linux_headers() {
-    print_message "   Modifying files for Linux compatibility"
+    print_message "     Modifying files for Linux compatibility"
     if ! grep -q '#include <stdint.h>' CIPster/source/src/byte_bufs.h; then
         echo "#include <stdint.h>" | cat - CIPster/source/src/byte_bufs.h > temp && mv temp CIPster/source/src/byte_bufs.h
     fi
@@ -72,7 +72,7 @@ modify_linux_headers() {
 
 # Function to build the Linux version
 build_linux() {
-    print_message "        Building Linux version"
+    print_message "     Building Linux version"
     cd build/linux
     cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/linux ../../CIPster/source/
     make
@@ -82,7 +82,7 @@ build_linux() {
 
 # Function to copy built library file to release directory for Linux
 copy_linux_lib() {
-    print_message "  Copying built library file for Linux"
+    print_message "     Copying built library file for Linux"
     cp build/linux/src/libeip.a release/linux/lib/cipster
     echo -e "${PRIMARY_COLOR}Done."
 }
@@ -116,7 +116,7 @@ copy_headers() {
 
 # Function to create zip file of the library for Windows
 create_windows_zip() {
-    print_message "   Creating zip file for Windows release"
+    print_message "     Creating zip file for Windows release"
     cd release/windows
     zip -r cipster-windows.zip *
     mv cipster-windows.zip ../
@@ -126,7 +126,7 @@ create_windows_zip() {
 
 # Function to create zip file of the library for Linux
 create_linux_zip() {
-    print_message "    Creating zip file for Linux release"
+    print_message "     Creating zip file for Linux release"
     cd release/linux
     zip -r cipster-linux.zip *
     mv cipster-linux.zip ../
