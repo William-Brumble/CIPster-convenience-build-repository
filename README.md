@@ -22,10 +22,11 @@ The `run.sh` script in this repository automates the process of updating the CIP
 
 ## Requirements
 
+- Linux operating system
 - CMake
 - Make
-- GCC (for Linux)
-- MinGW64 (for Windows)
+- GCC (for building Linux lib)
+- MinGW64 (for building Windows lib)
 
 ## Usage Example
 
