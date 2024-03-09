@@ -6,6 +6,29 @@ GREEN='\033[0;32m'
 PRIMARY_COLOR=${GREEN}
 NO_COLOR='\033[0m' # No Color
 
+# Make directories that are excluded from GIT
+create_directories() {
+    echo -n -e "${PRIMARY_COLOR}"
+    echo "---------------------------------------------"
+    echo "|      Creating Directories                 |"
+    echo "---------------------------------------------"
+    echo -n -e "${NO_COLOR}"
+
+    mkdir -p build/windows
+    mkdir -p release/windows/include/cipster/cip
+    mkdir -p release/windows/include/cipster/enet_encap
+    mkdir -p release/windows/include/cipster/utils
+    mkdir -p release/windows/lib/cipster
+
+    mkdir -p build/linux
+    mkdir -p release/linux/include/cipster/cip
+    mkdir -p release/linux/include/cipster/enet_encap
+    mkdir -p release/linux/include/cipster/utils
+    mkdir -p release/linux/lib/cipster
+
+    echo -e "${PRIMARY_COLOR}Done."
+}
+    
 # Function to update CIPster submodule
 update_submodule() {
     echo -n -e "${PRIMARY_COLOR}"
@@ -24,7 +47,6 @@ build_windows() {
     echo "|        Building Windows version           |"
     echo "---------------------------------------------"
     echo -e "${NO_COLOR}"
-    mkdir -p build/windows
     cd build/windows
     cmake -DCMAKE_TOOLCHAIN_FILE=../../CIPster/source/buildsupport/Toolchain/toolchain-mingw64.cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/windows ../../CIPster/source/
     make
@@ -66,7 +88,6 @@ build_linux() {
     echo "|        Building Linux version             |"
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
-    mkdir -p build/linux
     cd build/linux
     cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/linux ../../CIPster/source/
     make
@@ -124,7 +145,7 @@ create_windows_zip() {
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
     cd release/windows
-    find . -type f -not -name '*.gitkeep' -exec zip -r cipster-windows.zip {} +
+    zip -r cipster-windows.zip *
     mv cipster-windows.zip ../
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
@@ -138,13 +159,14 @@ create_linux_zip() {
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
     cd release/linux
-    find . -type f -not -name '*.gitkeep' -exec zip -r cipster-linux.zip {} +
+    zip -r cipster-linux.zip *
     mv cipster-linux.zip ../
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
 }
 # Main script execution
 update_submodule
+create_directories
 build_windows
 copy_windows_lib
 modify_linux_headers

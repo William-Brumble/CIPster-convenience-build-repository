@@ -1,9 +1,5 @@
 build/
-release/*.zip
-release/windows/**/*.h
-release/windows/**/*.a
-release/linux/**/*.h
-release/linux/**/*.a
+release/
 
 
 # Prerequisites
