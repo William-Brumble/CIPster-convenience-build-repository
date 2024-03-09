@@ -1,0 +1,44 @@
+build/
+release/*.zip
+release/linux/include/*.h
+release/linux/include/cip/*.h
+release/linux/include/utils/*.h
+release/linux/include/enet_encap/*.h
+release/windows/include/*.h
+release/windows/include/cip/*.h
+release/windows/include/utils/*.h
+release/windows/include/enet_encap/*.h
+
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app

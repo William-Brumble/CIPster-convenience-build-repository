@@ -1,0 +1,3 @@
+[submodule "CIPster"]
+	path = CIPster
+	url = https://github.com/liftoff-sr/CIPster.git
