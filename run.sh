@@ -24,8 +24,9 @@ build_windows() {
     echo "|        Building Windows version           |"
     echo "---------------------------------------------"
     echo -e "${NO_COLOR}"
+    mkdir -p build/windows
     cd build/windows
-    cmake -DCMAKE_TOOLCHAIN_FILE=../../CIPster/source/buildsupport/Toolchain/toolchain-mingw64.cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INO_COLORLUDE_DIR=../../config/windows ../../CIPster/source/
+    cmake -DCMAKE_TOOLCHAIN_FILE=../../CIPster/source/buildsupport/Toolchain/toolchain-mingw64.cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/windows ../../CIPster/source/
     make
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
@@ -38,7 +39,7 @@ copy_windows_lib() {
     echo "|  Copying built library file for Windows  |"
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
-    cp build/windows/src/libeip.a release/windows/lib
+    cp build/windows/src/libeip.a release/windows/lib/cipster
     echo -e "${PRIMARY_COLOR}Done."
 }
 
@@ -65,8 +66,9 @@ build_linux() {
     echo "|        Building Linux version             |"
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
+    mkdir -p build/linux
     cd build/linux
-    cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INO_COLORLUDE_DIR=../../config/linux ../../CIPster/source/
+    cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/linux ../../CIPster/source/
     make
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
@@ -79,7 +81,7 @@ copy_linux_lib() {
     echo "|  Copying built library file for Linux    |"
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
-    cp build/linux/src/libeip.a release/linux/lib
+    cp build/linux/src/libeip.a release/linux/lib/cipster
     echo -e "${PRIMARY_COLOR}Done."
 }
 
@@ -90,26 +92,26 @@ copy_headers() {
     echo "|     Copying header files to release       |"
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
-    cp config/windows/cipster_user_conf.h release/windows/include
-    cp config/linux/cipster_user_conf.h release/linux/include
+    cp config/windows/cipster_user_conf.h release/windows/include/cipster
+    cp config/linux/cipster_user_conf.h release/linux/include/cipster
 
     cd CIPster/source/src/
-    cp *.h ../../../release/windows/include
-    cp *.h ../../../release/linux/include
+    cp *.h ../../../release/windows/include/cipster
+    cp *.h ../../../release/linux/include/cipster
 
     cd cip
-    cp *.h ../../../../release/windows/include/cip
-    cp *.h ../../../../release/linux/include/cip
+    cp *.h ../../../../release/windows/include/cipster/cip
+    cp *.h ../../../../release/linux/include/cipster/cip
     cd ..
 
     cd enet_encap
-    cp *.h ../../../../release/windows/include/enet_encap
-    cp *.h ../../../../release/linux/include/enet_encap
+    cp *.h ../../../../release/windows/include/cipster/enet_encap
+    cp *.h ../../../../release/linux/include/cipster/enet_encap
     cd ..
 
     cd utils
-    cp *.h ../../../../release/windows/include/utils
-    cp *.h ../../../../release/linux/include/utils
+    cp *.h ../../../../release/windows/include/cipster/utils
+    cp *.h ../../../../release/linux/include/cipster/utils
     cd ../../../../
     echo -e "${PRIMARY_COLOR}Done."
 }
@@ -122,7 +124,7 @@ create_windows_zip() {
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
     cd release/windows
-    zip -r cipster-windows.zip *
+    find . -type f -not -name '*.gitkeep' -exec zip -r cipster-windows.zip {} +
     mv cipster-windows.zip ../
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
@@ -136,12 +138,11 @@ create_linux_zip() {
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
     cd release/linux
-    zip -r cipster-linux.zip *
+    find . -type f -not -name '*.gitkeep' -exec zip -r cipster-linux.zip {} +
     mv cipster-linux.zip ../
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
 }
-
 # Main script execution
 update_submodule
 build_windows

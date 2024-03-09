@@ -1,13 +1,9 @@
 build/
 release/*.zip
-release/linux/include/*.h
-release/linux/include/cip/*.h
-release/linux/include/utils/*.h
-release/linux/include/enet_encap/*.h
-release/windows/include/*.h
-release/windows/include/cip/*.h
-release/windows/include/utils/*.h
-release/windows/include/enet_encap/*.h
+release/windows/**/*.h
+release/windows/**/*.a
+release/linux/**/*.h
+release/linux/**/*.a
 
 
 # Prerequisites
