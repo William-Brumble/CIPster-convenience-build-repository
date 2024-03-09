@@ -6,14 +6,19 @@ GREEN='\033[0;32m'
 PRIMARY_COLOR=${GREEN}
 NO_COLOR='\033[0m' # No Color
 
-# Make directories that are excluded from GIT
-create_directories() {
+# Function to print a message with ASCII art
+print_message() {
+    local message="$1"
     echo -n -e "${PRIMARY_COLOR}"
     echo "---------------------------------------------"
-    echo "|      Creating Directories                 |"
+    echo "|${message}"
     echo "---------------------------------------------"
     echo -n -e "${NO_COLOR}"
+}
 
+# Make directories that are excluded from GIT
+create_directories() {
+    print_message "      Creating Directories"
     mkdir -p build/windows
     mkdir -p release/windows/include/cipster/cip
     mkdir -p release/windows/include/cipster/enet_encap
@@ -28,25 +33,17 @@ create_directories() {
 
     echo -e "${PRIMARY_COLOR}Done."
 }
-    
+
 # Function to update CIPster submodule
 update_submodule() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|      Updating CIPster submodule           |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "      Updating CIPster submodule"
     git submodule update --init --recursive --remote
     echo -e "${PRIMARY_COLOR}Done."
 }
 
 # Function to build the Windows version
 build_windows() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|        Building Windows version           |"
-    echo "---------------------------------------------"
-    echo -e "${NO_COLOR}"
+    print_message "        Building Windows version"
     cd build/windows
     cmake -DCMAKE_TOOLCHAIN_FILE=../../CIPster/source/buildsupport/Toolchain/toolchain-mingw64.cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/windows ../../CIPster/source/
     make
@@ -56,22 +53,14 @@ build_windows() {
 
 # Function to copy built library file to release directory for Windows
 copy_windows_lib() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|  Copying built library file for Windows  |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "  Copying built library file for Windows"
     cp build/windows/src/libeip.a release/windows/lib/cipster
     echo -e "${PRIMARY_COLOR}Done."
 }
 
 # Function to modify header files for Linux compatibility
 modify_linux_headers() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|   Modifying files for Linux compatibility |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "   Modifying files for Linux compatibility"
     if ! grep -q '#include <stdint.h>' CIPster/source/src/byte_bufs.h; then
         echo "#include <stdint.h>" | cat - CIPster/source/src/byte_bufs.h > temp && mv temp CIPster/source/src/byte_bufs.h
     fi
@@ -83,11 +72,7 @@ modify_linux_headers() {
 
 # Function to build the Linux version
 build_linux() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|        Building Linux version             |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "        Building Linux version"
     cd build/linux
     cmake -DCMAKE_BUILD_TYPE=Release -DUSER_INCLUDE_DIR=../../config/linux ../../CIPster/source/
     make
@@ -97,22 +82,14 @@ build_linux() {
 
 # Function to copy built library file to release directory for Linux
 copy_linux_lib() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|  Copying built library file for Linux    |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "  Copying built library file for Linux"
     cp build/linux/src/libeip.a release/linux/lib/cipster
     echo -e "${PRIMARY_COLOR}Done."
 }
 
 # Function to copy header files to both Linux and Windows release directories
 copy_headers() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|     Copying header files to release       |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "     Copying header files to release"
     cp config/windows/cipster_user_conf.h release/windows/include/cipster
     cp config/linux/cipster_user_conf.h release/linux/include/cipster
 
@@ -139,11 +116,7 @@ copy_headers() {
 
 # Function to create zip file of the library for Windows
 create_windows_zip() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|   Creating zip file for Windows release   |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "   Creating zip file for Windows release"
     cd release/windows
     zip -r cipster-windows.zip *
     mv cipster-windows.zip ../
@@ -153,17 +126,14 @@ create_windows_zip() {
 
 # Function to create zip file of the library for Linux
 create_linux_zip() {
-    echo -n -e "${PRIMARY_COLOR}"
-    echo "---------------------------------------------"
-    echo "|    Creating zip file for Linux release    |"
-    echo "---------------------------------------------"
-    echo -n -e "${NO_COLOR}"
+    print_message "    Creating zip file for Linux release"
     cd release/linux
     zip -r cipster-linux.zip *
     mv cipster-linux.zip ../
     cd ../../
     echo -e "${PRIMARY_COLOR}Done."
 }
+
 # Main script execution
 update_submodule
 create_directories
